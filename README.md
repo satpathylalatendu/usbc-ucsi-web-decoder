@@ -1,5 +1,8 @@
 # UCSI Web Decoder
 
+![Python](https://img.shields.io/badge/python-3.10-blue)
+![License](https://img.shields.io/badge/license-Apache%202.0-green)
+
 A professional web-based analyzer and decoder for UCSI (USB Type-C Connector System Software Interface) protocol testing and debugging. Designed for hardware engineers, firmware developers, and QA teams working with USB Type-C and Power Delivery implementations.
 
 
