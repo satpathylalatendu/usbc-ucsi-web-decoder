@@ -4,16 +4,17 @@ This project accepts improvements to decoding accuracy, command coverage, platfo
 
 ## Before You Start
 
-- Use the root-level [app.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app.py) as the active runtime entrypoint.
+- Use the root-level [app.py](app.py) as the active runtime entrypoint.
 - Keep changes focused. Avoid mixing decoder changes, UI refactors, and packaging updates in the same pull request unless they are tightly coupled.
 - If you add or change a decoder, validate the affected command path with representative sample payloads.
 
 ## Development Setup
 
-1. Create and activate a virtual environment.
-2. Install dependencies with `pip install -r requirements.txt`.
-3. Start the app with `python app.py`.
-4. Open `http://localhost:5000` in a browser.
+1. Install dependencies with `pip install -r requirements.txt`.
+2. Start the app with `python app.py`.
+3. Open `http://localhost:5000` in a browser.
+
+Using a virtual environment is recommended for development isolation, but it is optional.
 
 ## Contribution Workflow
 
@@ -43,9 +44,9 @@ Good contributions include:
 
 Changes that need extra care:
 
-- Widening the active runtime away from [app.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app.py)
+- Widening the active runtime away from [app.py](app.py)
 - Adding new external runtime dependencies
-- Modifying packaging behavior in [scripts/UCSIDecoder.spec](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts/UCSIDecoder.spec)
+- Modifying packaging behavior in [scripts/UCSIDecoder.spec](scripts/UCSIDecoder.spec)
 - Updating bundled hardware adapter integration files
 
 ## Code Style
@@ -56,4 +57,4 @@ Changes that need extra care:
 
 ## Security
 
-If you find a security-sensitive issue, follow the reporting guidance in [SECURITY.md](/c:/lalat/persional/opensource/ucsi-decoder-webapp/SECURITY.md) instead of opening a public issue with exploit details.
+If you find a security-sensitive issue, follow the reporting guidance in [SECURITY.md](SECURITY.md) instead of opening a public issue with exploit details.

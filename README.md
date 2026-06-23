@@ -2,6 +2,8 @@
 
 **Cross-Platform (Windows & Linux)** — UCSI 3.0 Decoder Web App is a Flask-based workspace for decoding, executing, and reviewing USB Type-C Connector System Software Interface commands and responses. It is built around the UCSI 3.0 command model and supports both manual decode workflows and live platform-backed command execution.
 
+Repository name: `usbc-ucsi-web-decoder`
+
 This repository is intended for firmware engineers, validation teams, platform integrators, and anyone debugging UCSI behavior across connector state, role swaps, power data, alternate modes, and PD messaging.
 
 ## Highlights
@@ -18,7 +20,7 @@ This repository is intended for firmware engineers, validation teams, platform i
 
 ## What The Application Does
 
-The active application entrypoint is the root-level [app.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app.py). From that server, the web app provides:
+The active application entrypoint is the root-level [app.py](app.py). From that server, the web app provides:
 
 - A browsable command catalog grouped into core control, capability/status, USB configuration, power management, alternate modes, PD messages, and advanced operations
 - Automatic command formatting for connector-specific requests
@@ -46,19 +48,19 @@ The command set currently includes these major groups:
 
 There are two Python application layouts in the repository:
 
-- [app.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app.py): the working application entrypoint and the one you should run today
-- [app/main.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app/main.py): an in-progress package refactor scaffold that is not yet the primary runtime path
+- [app.py](app.py): the working application entrypoint and the one you should run today
+- [app/main.py](app/main.py): an in-progress package refactor scaffold that is not yet the primary runtime path
 
 If you are using or evaluating the project, run the root application.
 
 ## Repository Layout
 
-- [app.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app.py): active Flask server and API routes
-- [decoders/ucsi_decoders.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/decoders/ucsi_decoders.py): command and response decode logic
-- [app/templates/index.html](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app/templates/index.html): main UI shell
-- [app/static/js/app.js](/c:/lalat/persional/opensource/ucsi-decoder-webapp/app/static/js/app.js): browser-side interaction logic
-- [aardvark/](/c:/lalat/persional/opensource/ucsi-decoder-webapp/aardvark): external adapter integration and legacy automation utilities
-- [scripts/](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts): helper scripts for running and packaging
+- [app.py](app.py): active Flask server and API routes
+- [decoders/ucsi_decoders.py](decoders/ucsi_decoders.py): command and response decode logic
+- [app/templates/index.html](app/templates/index.html): main UI shell
+- [app/static/js/app.js](app/static/js/app.js): browser-side interaction logic
+- [aardvark/](aardvark): external adapter integration and legacy automation utilities
+- [scripts/](scripts): helper scripts for running and packaging
 
 ## Requirements
 
@@ -69,7 +71,7 @@ If you are using or evaluating the project, run the root application.
 
 ### Python Packages
 
-Install from [requirements.txt](/c:/lalat/persional/opensource/ucsi-decoder-webapp/requirements.txt):
+Install from [requirements.txt](requirements.txt):
 
 ```bash
 pip install -r requirements.txt
@@ -97,10 +99,12 @@ Optional external adapter mode:
 
 ```bash
 git clone <your-repo-url>
-cd ucsi-decoder-webapp
+cd usbc-ucsi-web-decoder
 ```
 
-### 2. Create A Virtual Environment
+### 2. (Optional) Create A Virtual Environment
+
+Using a virtual environment is recommended for development isolation, but it is not required to run the app.
 
 Windows:
 
@@ -140,7 +144,7 @@ The server starts on `http://127.0.0.1:5000` or `http://localhost:5000`.
 
 ## Alternate Run Helpers
 
-You can also use the helper scripts in [scripts/](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts):
+You can also use the helper scripts in [scripts/](scripts):
 
 Windows:
 
@@ -176,8 +180,8 @@ chmod +x scripts/build.sh
 
 The build process will:
 1. Clean any previous builds
-2. Compile the application using PyInstaller and [scripts/UCSIDecoder.spec](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts/UCSIDecoder.spec)
-3. Create a standalone single-file executable in `dist/UCSIDecoder.exe`
+2. Compile the application using PyInstaller and [scripts/UCSIDecoder.spec](scripts/UCSIDecoder.spec)
+3. Create a standalone single-file executable in `dist/UCSIDecoder`
 
 ### Running The Executable
 
@@ -265,9 +269,9 @@ The server exposes JSON endpoints used by the UI, including:
 
 The repository includes PyInstaller support for packaging:
 
-- [scripts/build.bat](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts/build.bat)
-- [scripts/build.sh](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts/build.sh)
-- [scripts/UCSIDecoder.spec](/c:/lalat/persional/opensource/ucsi-decoder-webapp/scripts/UCSIDecoder.spec)
+- [scripts/build.bat](scripts/build.bat)
+- [scripts/build.sh](scripts/build.sh)
+- [scripts/UCSIDecoder.spec](scripts/UCSIDecoder.spec)
 
 Generated output directories such as `build/` and `dist/` should not be treated as source.
 
@@ -283,11 +287,11 @@ Generated output directories such as `build/` and `dist/` should not be treated 
 
 This repository already includes an Apache 2.0 license. For public hosting, the important repository-facing files are:
 
-- [README.md](/c:/lalat/persional/opensource/ucsi-decoder-webapp/README.md)
-- [LICENSE](/c:/lalat/persional/opensource/ucsi-decoder-webapp/LICENSE)
-- [CONTRIBUTING.md](/c:/lalat/persional/opensource/ucsi-decoder-webapp/CONTRIBUTING.md)
-- [SECURITY.md](/c:/lalat/persional/opensource/ucsi-decoder-webapp/SECURITY.md)
-- [.gitignore](/c:/lalat/persional/opensource/ucsi-decoder-webapp/.gitignore)
+- [README.md](README.md)
+- [LICENSE](LICENSE)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [SECURITY.md](SECURITY.md)
+- [.gitignore](.gitignore)
 
 Before publishing, it is also worth reviewing generated output folders and excluding any local tools, binaries, logs, or device-specific captures that should not live in source control.
 
@@ -297,11 +301,11 @@ The command catalog and decode workflows in this repository are written around t
 
 ## Contributing And Security
 
-Contribution guidance is in [CONTRIBUTING.md](/c:/lalat/persional/opensource/ucsi-decoder-webapp/CONTRIBUTING.md).
+Contribution guidance is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Security reporting guidance is in [SECURITY.md](/c:/lalat/persional/opensource/ucsi-decoder-webapp/SECURITY.md).
+Security reporting guidance is in [SECURITY.md](SECURITY.md).
 
 ## License
 
-This project is licensed under the Apache License 2.0. See [LICENSE](/c:/lalat/persional/opensource/ucsi-decoder-webapp/LICENSE).
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE).
 

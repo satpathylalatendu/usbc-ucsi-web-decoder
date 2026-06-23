@@ -48,7 +48,7 @@ Both `run.bat` and `run.sh` will:
 
 Both `build.bat` and `build.sh` will:
 1. Clean previous builds
-2. Build a standalone executable using PyInstaller
+2. Build a standalone single-file executable using PyInstaller
 3. Create the executable in the `dist/` folder
 4. Display the build status and next steps
 
@@ -57,6 +57,8 @@ Both `build.bat` and `build.sh` will:
 - **Python 3.8+** (3.8 recommended for Aardvark I2C adapter compatibility)
 - **PyInstaller** (for building executables)
 - **Flask** and dependencies (installed via `run.bat/run.sh`)
+
+Virtual environment usage is optional. You can run and build directly from a system Python installation.
 
 ## Platform Notes
 

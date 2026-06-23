@@ -15,10 +15,10 @@ Use this folder when you want to execute UCSI traffic through the external I2C a
 
 ## Legacy Automation Flow
 
-1. Install a compatible Python environment.
+1. Install a compatible Python environment (virtual environment optional).
 2. Connect the external adapter to the target system and the host machine.
-3. Update test inputs in [User_Inputs.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/aardvark/User_Inputs.py).
-4. Select the test coverage you want in [Run_TestCases.py](/c:/lalat/persional/opensource/ucsi-decoder-webapp/aardvark/Run_TestCases.py).
+3. Update test inputs in [User_Inputs.py](aardvark/User_Inputs.py).
+4. Select the test coverage you want in [Run_TestCases.py](aardvark/Run_TestCases.py).
 5. Run the test runner from a command prompt.
 
 Example:
