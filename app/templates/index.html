@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>UCSI Decoder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ cache_version }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="infra-bg-gradient"></div>
+    <div class="infra-bg-grid"></div>
+    <div class="infra-bg-geometry" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+    </div>
+    <canvas id="particleCanvas" class="infra-bg-particles" aria-hidden="true"></canvas>
+
+    <main class="infra-main">
+        <section class="platform-section platform-root-only">
+            <div class="container app-shell">
+                <header class="workspace-header">
+                    <div class="header-content">
+                        <div class="header-left">
+                            <img src="{{ url_for('static', filename='images/usbc-logo.svg') }}" alt="USB-C Logo" class="logo" id="logoImage" style="cursor: pointer;" title="Click to view HW Setup">
+                        </div>
+                        <div class="header-center">
+                            <h1>UCSI 3.0 Decoder</h1>
+                            <p class="subtitle">USB Type-C Connector System Software Interface Decoder</p>
+                        </div>
+                        <div class="header-right">
+                            <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle theme">Light Mode</button>
+                            <div class="version-info">
+                                <span>Version {{ version }}</span>
+                                <span>|</span>
+                                <span>Author: {{ author }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Left Panel: Commands -->
+                    <div class="left-panel">
+                        <div class="panel-header">
+                            <!-- Aardvark Mode Toggle -->
+                            <div class="aardvark-toggle">
+                                <span class="toggle-label">Aardvark Mode</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="aardvarkMode">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Port Selection -->
+                            <div class="port-selection">
+                                <label>Port:</label>
+                                <div class="port-buttons">
+                                    <button class="port-btn active" data-port="1">Port 1</button>
+                                    <button class="port-btn" data-port="2">Port 2</button>
+                                    <button class="port-btn" data-port="3">Port 3</button>
+                                    <button class="port-btn" data-port="4">Port 4</button>
+                                </div>
+                            </div>
+
+                            <h2>UCSI Commands</h2>
+
+                            <div class="search-box">
+                                <input type="text" id="commandSearch" placeholder="Search UCSI commands, hex, or category">
+                            </div>
+                        </div>
+
+                        <!-- Tabs for Categories -->
+                        {% set category_labels = {
+                            'Basic Control': 'Core Control',
+                            'Capability & Status': 'Capabilities and Status',
+                            'USB Configuration': 'USB Configuration Management',
+                            'Power Management': 'Power and Role Management',
+                            'Alternate Modes': 'Alternate Mode Management',
+                            'PD Messages': 'PD Message Operations',
+                            'Advanced Features': 'Advanced Operations'
+                        } %}
+                        <div class="tabs">
+                            <button class="tab-button active" data-category="all">Command Library</button>
+                            {% for category in categories.keys() %}
+                            <button class="tab-button" data-category="{{ category }}">{{ category_labels.get(category, category) }}</button>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Command List -->
+                        <div class="command-list" id="commandList">
+                            {% for cmd in commands %}
+                            <div class="command-item" data-category="{{ cmd.category }}" data-cmd-key="{{ cmd.key }}" data-cmd-hex="{{ cmd.cmd_hex }}">
+                                <div class="command-name">{{ cmd.key }}</div>
+                                <div class="command-hex" id="cmd-hex-{{ loop.index }}">{{ cmd.cmd_hex }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Decoder -->
+                    <div class="right-panel">
+                        <!-- Device Status Banner -->
+                        <div id="deviceStatus" class="device-status" style="background: #f8f9fa; border-color: #dee2e6;">
+                            <span class="status-icon">🔍</span>
+                            <span class="status-text">Initializing device check...</span>
+                        </div>
+
+                        <!-- Input Section -->
+                        <div class="decoder-section">
+                            <h2>Decode Response</h2>
+
+                            <div class="form-group">
+                                <label for="selectedCommand">Selected Command:</label>
+                                <input type="text" id="selectedCommand" readonly placeholder="Click a command on the left">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="commandHex">Command Hex (for selected port):</label>
+                                <input type="text" id="commandHex" readonly placeholder="Will update when command is selected">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="action-buttons-inline">
+                                    <button id="runCommandBtn" class="btn btn-run" disabled>
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle; margin-right: 5px;">
+                                            <path d="M3 2v12l10-6z"/>
+                                        </svg>
+                                        Run Command
+                                    </button>
+                                    <button id="runAllBtn" class="btn btn-action">Run All</button>
+                                    <button id="runSelectedBtn" class="btn btn-action">Run Selected</button>
+                                    <button id="stressTestBtn" class="btn btn-action">Run Sequential</button>
+                                    <button id="runConcurrentBtn" class="btn btn-action">Run Concurrent</button>
+                                </div>
+                                <span class="run-hint">Select a command and click Run to execute and decode</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="hexResponse">Hex Response Data:</label>
+                                <textarea id="hexResponse" rows="4" placeholder="Paste hex response here (e.g., 00 01 02 03 or 0x00010203)"></textarea>
+                                <div style="margin-top: 8px;">
+                                    <button id="decodeBtn" class="btn btn-primary">Decode Manual Input</button>
+                                    <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Linux Kernel Logs Section (Linux only, hidden by default) -->
+                        <div id="linuxLogsSection" class="decoder-section" style="display: none;">
+                            <div class="output-header">
+                                <h2 style="color: #f59e0b; display: flex; align-items: center; cursor: pointer;" onclick="toggleDmesgLogs()">
+                                    <span id="dmesgToggle" style="margin-right: 8px;">▼</span>
+                                    Linux Kernel Logs (dmesg - UCSI/Type-C)
+                                </h2>
+                            </div>
+                            <div id="dmesgLogsContent" class="output-area" style="display: block; background: #020617; border: 2px solid #f59e0b; max-height: 400px; overflow-y: auto;">
+                                <pre id="dmesgLogsText" style="margin: 0; font-family: 'Courier New', monospace; white-space: pre-wrap; color: #22d3ee; line-height: 1.6; font-size: 12px; padding: 15px;"></pre>
+                            </div>
+                        </div>
+
+                        <!-- Output Section -->
+                        <div class="output-section">
+                            <div class="output-header">
+                                <h2>Decoded Results</h2>
+                                <div class="output-actions">
+                                    <button id="saveSummaryBtn" class="btn btn-small">Save Summary</button>
+                                    <button id="saveAllResultsPDFBtn" class="btn btn-small" style="display: none;">Save All Results PDF</button>
+                                    <div id="saveResultBtnGroup" class="btn-group" style="display: none;">
+                                        <button id="saveResultBtn" class="btn btn-small">Save Result</button>
+                                        <button id="saveResultDropdown" class="btn btn-small dropdown-toggle" aria-label="Save options">▼</button>
+                                        <div id="saveResultMenu" class="dropdown-menu">
+                                            <button class="dropdown-item" onclick="saveCurrentResult()">Save All as Text</button>
+                                            <button class="dropdown-item" onclick="saveCurrentResultPDF()">Save All as PDF</button>
+                                            <button class="dropdown-item" onclick="saveLastResult()">Save Last Result (Text)</button>
+                                            <button class="dropdown-item" onclick="saveLastResultPDF()">Save Last Result (PDF)</button>
+                                        </div>
+                                    </div>
+                                    <button id="copyResultBtn" class="btn btn-small" style="display: none;">Copy</button>
+                                </div>
+                            </div>
+                            <div id="outputArea" class="output-area">
+                                <div class="placeholder">
+                                    <p>Select a command and click Run to execute and decode</p>
+                                    <p class="hint">Or enter hex response data manually</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Section -->
+                        <div class="history-section">
+                            <div class="history-header">
+                                <h3>History</h3>
+                                <div class="history-actions">
+                                    <button id="exportSummary" class="btn btn-small">Export Summary</button>
+                                    <button id="clearHistory" class="btn btn-small">Clear History</button>
+                                </div>
+                            </div>
+                            <div id="historyList" class="history-list"></div>
+                        </div>
+
+                        <!-- Results Summary / Pie Chart -->
+                        <div class="results-summary">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="margin: 0;">Results Summary</h3>
+                                <div class="port-filter">
+                                    <button class="filter-btn active" data-filter="all">All Ports</button>
+                                    <button class="filter-btn" data-filter="1">Port 1</button>
+                                    <button class="filter-btn" data-filter="2">Port 2</button>
+                                    <button class="filter-btn" data-filter="3">Port 3</button>
+                                    <button class="filter-btn" data-filter="4">Port 4</button>
+                                </div>
+                            </div>
+                            <div id="chartContainer" class="chart-container">
+                                <canvas id="resultsChart"></canvas>
+                                <p id="chartMessage" class="chart-message">Run commands to see results summary</p>
+                            </div>
+                            <div id="resultsStats" class="results-stats"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer>
+                    <p>UCSI Decoder © 2026 | USB Type-C Protocol Workspace</p>
+                </footer>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Decoding...</p>
+    </div>
+
+    <!-- Parameter Dialogs -->
+    <div id="dialogOverlay" class="dialog-overlay" style="display: none;">
+        <div class="dialog-box">
+            <h3 id="dialogTitle">Configure Command</h3>
+            <div id="dialogContent"></div>
+            <div class="dialog-buttons">
+                <button id="dialogOk" class="btn-primary">OK</button>
+                <button id="dialogCancel" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sudo Password Dialog (Linux only) -->
+    <div id="sudoDialogOverlay" class="dialog-overlay" style="display: none;">
+        <div class="dialog-box">
+            <h3>Administrator Access Required</h3>
+            <div class="sudo-dialog-content">
+                <p>This application requires administrator privileges for USB device access.</p>
+                <p>Please enter your sudo password:</p>
+                <div class="form-group">
+                    <input type="password" id="sudoPassword" class="sudo-password-input" placeholder="Enter sudo password">
+                </div>
+                <div id="sudoError" class="sudo-error" style="display: none;"></div>
+            </div>
+            <div class="dialog-buttons">
+                <button id="sudoOk" class="btn-primary">Authenticate</button>
+                <button id="sudoCancel" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Popup Modal -->
+    <div id="imagePopupModal" class="image-popup-overlay">
+        <div class="image-popup-content">
+            <button class="image-popup-close" id="imagePopupClose">&times;</button>
+            <img src="{{ url_for('static', filename='images/UCSI_HW_Setup.jpg') }}" alt="UCSI HW Setup">
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}?v={{ cache_version }}"></script>
+</body>
+</html>

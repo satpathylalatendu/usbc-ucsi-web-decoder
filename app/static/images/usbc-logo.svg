@@ -1,0 +1,45 @@
+<svg width="320" height="120" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">USB-C Platform Logo</title>
+  <desc id="desc">A stylized USB-C connector icon with modern engineering visual style.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="20" y1="20" x2="300" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0E1116"/>
+      <stop offset="1" stop-color="#1A202C"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="70" y1="26" x2="250" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#89D329"/>
+      <stop offset="1" stop-color="#63A314"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="60" y1="38" x2="188" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E2E8F0"/>
+      <stop offset="1" stop-color="#AAB4C3"/>
+    </linearGradient>
+    <filter id="glow" x="44" y="18" width="240" height="88" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.45 0 0 0 0 0.76 0 0 0 0 0.08 0 0 0 0.35 0"/>
+    </filter>
+  </defs>
+
+  <rect x="8" y="8" width="304" height="104" rx="18" fill="url(#bg)" stroke="#2B3240"/>
+
+  <g filter="url(#glow)">
+    <rect x="64" y="30" width="206" height="60" rx="30" fill="url(#accent)" opacity="0.45"/>
+  </g>
+
+  <rect x="58" y="34" width="194" height="52" rx="26" fill="#121720" stroke="#3A4457"/>
+
+  <rect x="72" y="40" width="120" height="40" rx="20" fill="url(#metal)"/>
+  <rect x="86" y="47" width="26" height="8" rx="4" fill="#556070"/>
+  <rect x="122" y="47" width="26" height="8" rx="4" fill="#556070"/>
+  <rect x="86" y="65" width="26" height="8" rx="4" fill="#556070"/>
+  <rect x="122" y="65" width="26" height="8" rx="4" fill="#556070"/>
+
+  <rect x="194" y="46" width="42" height="28" rx="14" fill="#0D121A" stroke="#7CC021" stroke-width="2"/>
+  <path d="M212 50V70" stroke="#7CC021" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="212" cy="55" r="2.2" fill="#7CC021"/>
+  <circle cx="212" cy="65" r="2.2" fill="#7CC021"/>
+
+  <text x="20" y="26" font-family="Inter, Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#9AA6B8" letter-spacing="1.2">UCSI</text>
+  <text x="20" y="100" font-family="Inter, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#738096" letter-spacing="0.6">USB-C DECODER</text>
+</svg>

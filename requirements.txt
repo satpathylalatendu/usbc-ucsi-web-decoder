@@ -1,0 +1,4 @@
+Flask==3.0.0
+Werkzeug==3.0.1
+pyserial==3.5
+PyInstaller==5.0.1
