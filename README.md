@@ -1,5 +1,7 @@
 # UCSI 3.0 Decoder Web App
-<img width="1112" height="873" alt="image" src="https://github.com/user-attachments/assets/37dfc4a0-3784-4a94-8bba-0197dda20083" />
+
+<h2>Demo></h2>
+<img src="ucsiDemo.gif" width="1112" alt="UCSI Decoder Demo">
 
 **Cross-Platform (Windows & Linux)** — UCSI 3.0 Decoder Web App is a Flask-based workspace for decoding, executing, and reviewing USB Type-C Connector System Software Interface commands and responses. It is built around the UCSI 3.0 command model and supports both manual decode workflows and live platform-backed command execution.
 
